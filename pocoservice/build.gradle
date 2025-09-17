@@ -1,15 +1,15 @@
 apply plugin: 'com.android.application'
 
 android {
+    namespace "com.netease.open.pocoservice"
     def cmd = 'git rev-list HEAD --count'
     def gitVersion = cmd.execute().text.trim().toInteger()
 
-    compileSdkVersion 28
-    buildToolsVersion "25.0.3"
+    compileSdkVersion 34
     defaultConfig {
         applicationId "com.netease.open.pocoservice"
-        minSdkVersion 19
-        targetSdkVersion 29
+        minSdkVersion 21
+        targetSdkVersion 34
         versionCode gitVersion
         versionName "1.0.0." + gitVersion
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -26,20 +26,19 @@ android {
 }
 
 dependencies {
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    implementation 'androidx.test.uiautomator:uiautomator:2.2.0'
-    compile 'com.google.guava:guava:20.0'
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    testCompile 'junit:junit:4.12'
-    compile 'com.nanohttpd:nanohttpd-webserver:2.2.0'
-    compile 'com.android.support:support-annotations:25.3.1'
-    compile 'com.android.support.test:runner:0.5'
-    compile 'com.android.support.test:rules:0.5'
-    compile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
-    compile 'org.apache.commons:commons-lang3:3.5'
-    compile project(':open.netease.com')
-}
+    // продакшн
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation project(":open.netease.com")
+    implementation 'org.apache.commons:commons-lang3:3.17.0' // Use the single, newer version
+
+    // unit-тесты
+    implementation "junit:junit:4.13.2"
+
+    // instrumented / UI-тесты (AndroidX)
+    implementation "androidx.test:runner:1.7.0"
+    implementation "androidx.test:rules:1.7.0"
+    implementation "androidx.test.espresso:espresso-core:3.7.0"
+    implementation "androidx.test.uiautomator:uiautomator:2.3.0"
+    implementation 'com.nanohttpd:nanohttpd-webserver:2.2.0'
+    implementation 'androidx.appcompat:appcompat:1.7.1'
+  }
